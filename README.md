@@ -34,7 +34,7 @@ again, I'll document it here.
 Most configuration steps have already been taken in the declarative NixOS
 configuration here.
 
-```
+```bash
 # 1. copy public key database (or export/import)
 (host)$ scp .gnupg/pubring.kbx nas:~/.gnupg/
 
