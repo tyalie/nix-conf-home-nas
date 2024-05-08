@@ -5,6 +5,7 @@
 { config, lib, pkgs, ... }:
 
 let
+  mgnupg22 = pkgs.gnupg22.override { libgcrypt = pkgs.libgcrypt; };
 in {
   imports =
     [ # Include the results of the hardware scan.
@@ -25,7 +26,20 @@ in {
   environment.systemPackages = with pkgs; [
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
+    git
+    mgnupg22
   ];
+
+  # Some programs need SUID wrappers, can be configured further or are
+  # started in user sessions.
+  programs.git = {
+    enable = true;
+    config = {
+      safe.directory = "/etc/nixos";
+    };
+  };
+  # otherwise get's enabled automatically, using ssh gpg-agent forwarding
+  programs.gnupg.agent.enable = false;  
 
   # List services that you want to enable:
 
@@ -39,6 +53,9 @@ in {
       KbdInteractiveAuthentication = false;
       AllowGroups = [ "users" ];
     };
+    extraConfig = ''
+      StreamLocalBindUnlink yes  # used for gpg forwarding
+    '';
   };
 
   # This option defines the first version of NixOS you have installed on this particular machine,
