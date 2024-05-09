@@ -8,10 +8,18 @@
     [ (modulesPath + "/profiles/qemu-guest.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "nvme" "virtio_pci" "virtio_scsi" "usb_storage" "sd_mod" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" ];
-  boot.extraModulePackages = [ ];
+  boot = {
+    initrd = {
+      availableKernelModules = [ "ahci" "xhci_pci" "nvme" "virtio_pci" "virtio_scsi" "usb_storage" "sd_mod" ];
+      kernelModules = [ ];
+    };
+    kernelModules = [ "kvm-intel" ];
+    extraModulePackages = [ ];
+    kernelParams = [
+      "console=tty0"
+      "console=ttyS0,115200"
+    ];
+  };
 
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/c04224d2-7185-450b-bfef-4b9462bac461";
