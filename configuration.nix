@@ -58,6 +58,17 @@ in {
     '';
   };
 
+  systemd.user.services.gnupg-create-socketdir = {
+    enable = true;
+    wantedBy = [ "default.target" ];
+    description = "Create GnuPG socket directory";
+
+    serviceConfig = {
+      Type = "simple";
+      ExecStart = "${mgnupg22}/bin/gpgconf --create-socketdir";
+    };
+  };
+
   # This option defines the first version of NixOS you have installed on this particular machine,
   # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
   #
