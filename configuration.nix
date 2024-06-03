@@ -14,10 +14,12 @@ in {
     ];
 
   # Use the systemd-boot EFI boot loader.
+  boot.supportedFilesystems = [ "zfs" ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "nas"; # Define your hostname.
+  networking.hostId = "85307a5c";
 
   time.timeZone = "Europe/Amsterdam";
 
@@ -28,6 +30,7 @@ in {
     wget
     git
     mgnupg22
+    zfs
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -42,6 +45,9 @@ in {
   programs.gnupg.agent.enable = false;  
 
   # List services that you want to enable:
+
+  # Enable periodic TRIM on zfs drives
+  services.zfs.trim.enable = true;
 
   # Enable the OpenSSH daemon.
   services.openssh = {
